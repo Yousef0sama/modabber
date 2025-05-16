@@ -1,45 +1,44 @@
-"use client"
+"use client";
 
 // imports
 
 // hooks
-import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-
-// redux
-import { toggleTheme } from "@/store/features/themeSlice";
+import { useThemeMode } from "@/hooks/useThemeMode";
 
 // components
-import { Switch, Skeleton  } from "@mui/material";
+import { Switch, Skeleton } from "@mui/material";
 
 // interfaces
-import { RootState } from "@/store/index";
+type ColorType = "primary" | "secondary" | "error" | "info" | "success" | "warning" | "default";
 
-export default function ThemeSwitcher() {
+interface Props {
+  color?: ColorType;
+}
 
-  const dispatch = useDispatch();
-  const mode = useSelector((state: RootState) => state.theme.mode);
+export default function ThemeSwitcher({ color = "primary" }: Props) {
+  // get current theme mode and toggle function from custom hook
+  const { mode, toggle } = useThemeMode();
 
-  const [isClient, setIsClient] = useState(false)
+  // state to check if component is mounted on client side
+  const [isClient, setIsClient] = useState(false);
 
+  // mark component as mounted on client after first render
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    setIsClient(true);
+  }, []);
 
-  const handleChange = () => {
-    dispatch(toggleTheme())
+  // while server-side rendering, show skeleton placeholder
+  if (!isClient) {
+    return <Skeleton variant="rounded" width={100} height={26} />;
   }
 
+  // render the switch with the current mode and toggle handler
   return (
-    <div className="flex justify-cneter items-center">
-        {isClient ? (
-          <>
-            Dark
-            <Switch color="default" checked={mode === "dark"} onChange={handleChange} />
-          </>
-        ) : (
-          <Skeleton variant="rounded" width={100} height={26} />
-        )}
-    </div>
+    <Switch
+      color={color}
+      checked={mode === "dark"}
+      onChange={toggle}
+    />
   );
-};
+}

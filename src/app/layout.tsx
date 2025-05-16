@@ -1,7 +1,8 @@
 // imports
 
-// redux
-import ReduxProvider from "@/store/reduxProvider";
+// providers
+import ReduxProvider from "@/providers/reduxProvider";
+import AuthProvider from "@/providers/authProvider";
 
 // fonts
 import { Poppins } from "next/font/google";
@@ -11,7 +12,7 @@ import "@/styles/globals.css";
 
 // componets
 import Header from "@/components/header";
-import Container from "@/components/ui/container";
+import { Toaster } from "react-hot-toast"
 
 // interfaces
 import type { Metadata } from "next";
@@ -29,20 +30,22 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'مدبر',
-  description: '...',
+  description: 'مدبر هو تطبيق لإدارة المصاريف يساعدك على تتبع مصاريفك اليومية والشهرية بكل سهولة وشفافية. من خلال واجهة بسيطة وسهلة الاستخدام، يمكنك تسجيل المصاريف، وضع الميزانيات، وتحليل إنفاقك لتحسين إدارة أموالك وتحقيق أهدافك المالية.',
 };
 
 export default function RootLayout({children} : props) {
+
   return (
     <html lang="en">
       <body
         className={`${poppins.className} antialiased`}
       >
         <ReduxProvider>
-          <Header />
-          <Container>
+          <AuthProvider>
+            <Header />
             {children}
-          </Container>
+            <Toaster position="top-right" />
+          </AuthProvider>
         </ReduxProvider>
       </body>
     </html>
