@@ -27,10 +27,6 @@ const elMessiri = El_Messiri({
 export default function Header() {
   const currentUser = useCurrentUser();
 
-  useEffect(() => {
-    console.log(currentUser);
-  }, [currentUser]);
-
   return (
     <header className="bg-primary text-white min-h-[10vh] flex justify-between items-center px-4 sm:px-20">
       <Link href="/">
