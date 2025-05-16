@@ -3,9 +3,6 @@
 // fonts
 import { El_Messiri } from "next/font/google";
 
-// imports
-import { useEffect } from "react";
-
 // hooks
 import useCurrentUser from "@/hooks/useCurrentUser";
 
@@ -25,7 +22,7 @@ const elMessiri = El_Messiri({
 });
 
 export default function Header() {
-  const currentUser = useCurrentUser();
+  const currentUser = useCurrentUser(); 
 
   return (
     <header className="bg-primary text-white min-h-[10vh] flex justify-between items-center px-4 sm:px-20">
