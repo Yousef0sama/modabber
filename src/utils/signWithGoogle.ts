@@ -4,6 +4,9 @@
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 
+// Utilities
+import createUserIfNotExist from "./createUser";
+
 // toast
 import { toast } from "react-hot-toast";
 
@@ -19,7 +22,8 @@ import { toast } from "react-hot-toast";
  */
 export default async function handleGoogle(): Promise<boolean> {
   try {
-    await signInWithPopup(auth, googleProvider);
+    const { user } = await signInWithPopup(auth, googleProvider);
+    createUserIfNotExist(user);
     toast.success("Logged in with Google successfully");
     return true;
   } catch (error) {

@@ -7,6 +7,9 @@ import { auth } from "@/lib/firebase";
 // toast
 import { toast } from "react-hot-toast";
 
+// Utilities
+import createUserIfNotExist from "./createUser";
+
 // interfaces
 import { Dispatch, SetStateAction } from "react";
 import { InputField } from "@/interfaces/interfaces";
@@ -41,7 +44,8 @@ export default async function handleLogin(
     const password = getFieldValue("password");
 
     // Perform sign-in with email and password
-    await signInWithEmailAndPassword(auth, email, password);
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    createUserIfNotExist(user);
 
     // Notify user of successful login
     toast.success("Logged in successfully");

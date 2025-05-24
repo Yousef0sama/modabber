@@ -3,6 +3,7 @@
 // providers
 import ReduxProvider from "@/providers/reduxProvider";
 import AuthProvider from "@/providers/authProvider";
+import QueryProvider from "@/providers/queryProvider";
 
 // fonts
 import { Poppins } from "next/font/google";
@@ -41,11 +42,13 @@ export default function RootLayout({children} : props) {
         className={`${poppins.className} antialiased`}
       >
         <ReduxProvider>
-          <AuthProvider>
-            <Header />
-            {children}
-            <Toaster position="top-right" />
-          </AuthProvider>
+          <QueryProvider>
+            <AuthProvider>
+              <Header />
+              {children}
+              <Toaster position="top-right" />
+            </AuthProvider>
+          </QueryProvider>
         </ReduxProvider>
       </body>
     </html>
