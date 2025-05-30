@@ -45,6 +45,8 @@ export default async function handleLogin(
 
     // Perform sign-in with email and password
     const { user } = await signInWithEmailAndPassword(auth, email, password);
+
+    // Create user in Firestore if they don't exist
     createUserIfNotExist(user);
 
     // Notify user of successful login

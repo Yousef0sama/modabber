@@ -5,4 +5,5 @@ export const labelsMap: Record<string, string> = {
   lastName: "Last Name",
   email: "Email",
   password: "Password",
+  currentPassword: "Current Password",
 };

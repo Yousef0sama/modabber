@@ -7,8 +7,10 @@ import useRegisterLogic from "@/hooks/useRegister";
 import Container from "@/components/container";
 import FetchFields from "@/components/fetch/fetchFields";
 import Button from "@mui/material/Button";
-import ThemeProviderWraper from "@/providers/themeProvider";
 import Link from "next/link";
+
+// Providers
+import ThemeProviderWraper from "@/providers/themeProvider";
 
 export default function Register() {
   // Custom hook for managing form state and logic

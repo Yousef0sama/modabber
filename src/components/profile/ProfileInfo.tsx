@@ -80,7 +80,7 @@ export default function ProfileInfo() {
 
       {/* Edit Profile Link */}
       <Link
-        href={`/profile/edit/`} // navigate to edit profile page
+        href={`/profile/edit`} // navigate to edit profile page
         role="button"
         className="flex items-center gap-2 mt-4 bg-primary text-white p-2 rounded-md w-fit"
       >

@@ -1,22 +1,24 @@
 "use client";
 
-// React
+// Hooks
+import useLoginLogic from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
 
 // Components
 import Container from "@/components/container";
 import FetchFields from "@/components/fetch/fetchFields";
 import Button from "@mui/material/Button";
-import ThemeProviderWraper from "@/providers/themeProvider";
 import Link from "next/link";
 import { Checkbox, Divider, FormControlLabel } from "@mui/material";
+
+// Providers
+import ThemeProviderWraper from "@/providers/themeProvider";
+
+// Icons
 import { Google } from "@mui/icons-material";
 
 // Utilities
 import handleGoogle from "@/utils/signWithGoogle";
-
-// Hooks
-import useLoginLogic from "@/hooks/useLogin";
 
 export default function Login() {
   const {

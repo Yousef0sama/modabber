@@ -4,6 +4,9 @@
 import { auth } from "@/lib/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
+// utilities
+import createUserIfNotExist from "./createUser";
+
 // toast
 import { toast } from "react-hot-toast";
 
@@ -53,6 +56,9 @@ export default async function handleRegister(
       displayName: `${firstName} ${lastName}`.trim(),
     });
 
+    // Create user in Firestore if they don't exist
+    createUserIfNotExist(userCredential.user);
+
     // Notify user of successful registration
     toast.success("User registered successfully");
     return true;
@@ -73,7 +79,6 @@ export default async function handleRegister(
             : field
         )
       );
-      toast.error("Email is already in use");
     } else {
       // General error fallback
       toast.error("Registration failed. Please try again later");
