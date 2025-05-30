@@ -13,6 +13,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PersonIcon from '@mui/icons-material/Person';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 // utils
@@ -87,6 +88,15 @@ export default function ProfileInfo() {
         <EditIcon />
         Edit Profile
       </Link>
+      <Button
+        variant="contained"
+        color="error"
+        className="w-fit"
+        onClick={() => {}}
+        startIcon={<DeleteIcon />}
+      >
+        delete account
+      </Button>
     </>
   );
 }
