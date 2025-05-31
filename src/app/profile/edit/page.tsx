@@ -13,10 +13,10 @@ import { Button } from "@mui/material";
 // providers
 import ThemeProviderWraper from "@/providers/themeProvider";
 
-/*
-  * EditProfile component - Renders a user profile editing form.
-  * Uses custom hook to manage form state and submission.
-*/
+/**
+ * EditProfile component - Renders a user profile editing form.
+ * Uses custom hook to manage form state and submission.
+ */
 export default function EditProfile() {
   // Extract form logic
   const { fields, handleChange, handleSubmit } = useEditProfileLogic();

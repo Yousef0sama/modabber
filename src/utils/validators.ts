@@ -5,9 +5,9 @@
  */
 export function isEmpty(input: string): string {
   if (!input.trim()) {
-    return 'This field is required';
+    return "This field is required";
   }
-  return '';
+  return "";
 }
 
 /**
@@ -18,9 +18,9 @@ export function isEmpty(input: string): string {
 export function isEmail(email: string): string {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(email)) {
-    return 'Enter a valid email';
+    return "Enter a valid email";
   }
-  return '';
+  return "";
 }
 
 /**
@@ -32,9 +32,9 @@ export function isEmail(email: string): string {
 export function isNameValid(name: string): string {
   const nameRegex = /^[\p{L}]{2,50}$/u;
   if (!nameRegex.test(name)) {
-    return 'Name must have only letters';
+    return "Name must have only letters";
   }
-  return '';
+  return "";
 }
 
 /**
@@ -48,11 +48,12 @@ export function isNameValid(name: string): string {
  * @returns An error message if invalid, otherwise an empty string.
  */
 export function isPasswordValid(password: string): string {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&*?])[A-Za-z\d@#$!%*?&]{8,20}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&*?])[A-Za-z\d@#$!%*?&]{8,20}$/;
   if (!passwordRegex.test(password)) {
-    return 'Password must have:\n- Upper case letter\n- Lower case letter\n- Number\n- Special character (!@#$%&*?)';
+    return "Password must have:\n- Upper case letter\n- Lower case letter\n- Number\n- Special character (!@#$%&*?)";
   }
-  return '';
+  return "";
 }
 
 /**
@@ -62,9 +63,13 @@ export function isPasswordValid(password: string): string {
  * @param maxLength - Maximum length inclusive.
  * @returns An error message if length is out of range, otherwise an empty string.
  */
-export function checkLength(str: string, minLength: number, maxLength: number): string {
+export function checkLength(
+  str: string,
+  minLength: number,
+  maxLength: number
+): string {
   if (str.trim().length < minLength || str.trim().length > maxLength) {
     return `It must be between ${minLength} and ${maxLength}`;
   }
-  return '';
+  return "";
 }

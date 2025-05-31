@@ -6,7 +6,7 @@ import useRegisterLogic from "@/hooks/useRegister";
 // Components
 import Container from "@/components/container";
 import FetchFields from "@/components/fetch/fetchFields";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/material";
 import Link from "next/link";
 
 // Providers

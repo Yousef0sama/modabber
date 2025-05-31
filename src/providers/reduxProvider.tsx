@@ -10,11 +10,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "@/store/index";
 
 // interfaces
-import { ReactNode } from "react";
 
 type Props = {
-  children: ReactNode;
-}
+  children: React.ReactNode;
+};
 
 export default function RootProvider({ children }: Props) {
   return (

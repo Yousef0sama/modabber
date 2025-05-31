@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 // utilities
 import createUserIfNotExist from "./createUser";
+import { createNotification } from "@/utils/notifications";
 
 // toast
 import { toast } from "react-hot-toast";
@@ -61,8 +62,17 @@ export default async function handleRegister(
 
     // Notify user of successful registration
     toast.success("User registered successfully");
-    return true;
 
+    // Create a notification for verification if the user is not verified
+    if (userCredential.user.emailVerified === false) {
+      await createNotification(
+        userCredential.user.uid,
+        "Welcome!",
+        "Please verify your email to access all features."
+      );
+    }
+
+    return true;
   } catch (error: unknown) {
     const code = (error as { code?: string }).code;
 

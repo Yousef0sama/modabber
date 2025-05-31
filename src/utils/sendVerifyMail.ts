@@ -33,6 +33,8 @@ export default async function handleVerifyEmail(currentUser: User | null) {
   } catch (error) {
     // Log and show error toast
     console.log("Error sending verification email:", error);
-    toast.error("Something went wrong. Please try again later.", { id: toastId });
+    toast.error("Something went wrong. Please try again later.", {
+      id: toastId,
+    });
   }
 }

@@ -1,7 +1,12 @@
 // imports
 
 // firebase
-import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
 // toast
@@ -9,6 +14,7 @@ import { toast } from "react-hot-toast";
 
 // Utilities
 import createUserIfNotExist from "./createUser";
+import { createNotification } from "@/utils/notifications";
 
 // interfaces
 import { Dispatch, SetStateAction } from "react";
@@ -35,10 +41,14 @@ export default async function handleLogin(
 ): Promise<boolean> {
   try {
     // Set Firebase auth persistence mode
-    await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+    await setPersistence(
+      auth,
+      remember ? browserLocalPersistence : browserSessionPersistence
+    );
 
     // Helper function to get value from fields by name
-    const getFieldValue = (name: string) => fields.find((field) => field.name === name)!.value;
+    const getFieldValue = (name: string) =>
+      fields.find((field) => field.name === name)!.value;
 
     const email = getFieldValue("email");
     const password = getFieldValue("password");
@@ -51,8 +61,17 @@ export default async function handleLogin(
 
     // Notify user of successful login
     toast.success("Logged in successfully");
-    return true;
 
+    // Create a notification for verification if the user is not verified
+    if (user.emailVerified === false) {
+      await createNotification(
+        user.uid,
+        "Welcome!",
+        "Please verify your email to access all features."
+      );
+    }
+
+    return true;
   } catch (error) {
     const code = (error as { code?: string }).code;
 

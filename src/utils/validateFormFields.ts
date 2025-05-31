@@ -12,13 +12,15 @@ import { InputField } from "@/interfaces/interfaces";
  * @param fields - One or more InputField objects to validate.
  * @returns A new array of InputField objects with updated error state and message.
  */
-export default function validateFormFields(...fields: InputField[]): InputField[] {
+export default function validateFormFields(
+  ...fields: InputField[]
+): InputField[] {
   return fields.map((field) => {
     let error: string | null = null;
 
     for (const validate of field.validators) {
       error = validate(field.value);
-      if (error) break;  // Stop at first validation error
+      if (error) break; // Stop at first validation error
     }
 
     return {

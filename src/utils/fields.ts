@@ -54,8 +54,10 @@ export const getAutoComplete = (name: string): string => {
  * @param fields - The array of input fields.
  * @returns The matching field object or `undefined` if not found.
  */
-export const getFieldByName = (name: string, fields: InputField[]): InputField | undefined =>
-  fields.find((f) => f.name === name);
+export const getFieldByName = (
+  name: string,
+  fields: InputField[]
+): InputField | undefined => fields.find((f) => f.name === name);
 
 /**
  * Updates fields in the state based on a list of updated fields (by `name`).

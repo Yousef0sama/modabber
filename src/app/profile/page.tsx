@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // imports
 
@@ -9,18 +9,18 @@ import useUserProfile from "@/hooks/useUserProfile";
 
 // components
 import Container from "@/components/container";
-import { CircularProgress  } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import ProfileNav from "@/components/profile/profileNav";
 import ProfileInfo from "@/components/profile/ProfileInfo";
 
 // providers
 import ThemeProviderWraper from "@/providers/themeProvider";
 
-/*
+/**
  * Profile Page:
  * Displays the user's profile information or goals depending on the selected tab.
  * Shows loading spinner while fetching data.
-*/
+ */
 export default function Profile() {
   // Get current Firebase auth user
   const currentUser = useCurrentUser();
@@ -29,7 +29,7 @@ export default function Profile() {
   const { isLoading } = useUserProfile(currentUser?.uid);
 
   // State to control which tab is active (either 'profile' or 'goals')
-  const [activeTab, setActiveTab] = useState<'profile' | 'goals'>('profile');
+  const [activeTab, setActiveTab] = useState<"profile" | "goals">("profile");
 
   return (
     <Container className="flex justify-start">
@@ -47,10 +47,10 @@ export default function Profile() {
           ) : (
             <div className="flex flex-col w-full min-h-full gap-4 px-4">
               {/* Profile Info Tab */}
-              {activeTab === 'profile' && <ProfileInfo />}
+              {activeTab === "profile" && <ProfileInfo />}
 
               {/* Goals Tab */}
-              {activeTab === 'goals' && <div>الأهداف هنا</div>}
+              {activeTab === "goals" && <div>الأهداف هنا</div>}
             </div>
           )
         }

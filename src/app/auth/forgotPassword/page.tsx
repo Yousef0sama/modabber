@@ -7,16 +7,13 @@ import useForgotPassword from "@/hooks/useForgotPassword";
 
 // components
 import Container from "@/components/container";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { TextField, Button, Typography } from "@mui/material";
 
 // providers
 import ThemeProviderWraper from "@/providers/themeProvider";
 
 // Utilities
 import { formatCountdown } from "@/utils/countdown";
-
 
 export default function ForgotPassword() {
   const { fields, countdown, handleChange, handleSubmit } = useForgotPassword();

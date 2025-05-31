@@ -12,7 +12,7 @@ const firebaseConfig = {
   storageBucket: "moddaber1885.firebasestorage.app",
   messagingSenderId: "578322751582",
   appId: "1:578322751582:web:6b56344db4c9fa8bc854cf",
-  measurementId: "G-P66QH0F7XF"
+  measurementId: "G-P66QH0F7XF",
 };
 
 // Initialize Firebase app

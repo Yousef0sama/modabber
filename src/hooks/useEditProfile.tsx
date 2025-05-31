@@ -18,12 +18,12 @@ import { InputField } from "@/interfaces/interfaces";
 import { User } from "firebase/auth";
 
 /**
-  * Custom hook to manage the edit profile form logic.
-  ** Handles:
-  * - Form state and validation
-  * - Name and email updates
-  * - User feedback and redirection
-*/
+ * Custom hook to manage the edit profile form logic.
+ * Handles:
+ * - Form state and validation
+ * - Name and email updates
+ * - User feedback and redirection
+ */
 export default function useEditProfileLogic() {
   const router = useRouter();
   const currentUser: User = useCurrentUser()!;
@@ -73,12 +73,12 @@ export default function useEditProfileLogic() {
   };
 
   /*
-    * Handles form submission.
-    * - Validates changed fields.
-    * - Shows toast errors if needed.
-    * - Updates user name or email if valid.
-    * - Redirects to profile page on success.
-  */
+   * Handles form submission.
+   * - Validates changed fields.
+   * - Shows toast errors if needed.
+   * - Updates user name or email if valid.
+   * - Redirects to profile page on success.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -101,19 +101,31 @@ export default function useEditProfileLogic() {
     }
 
     // Ensure at least one field is filled
-    if (isEmpty(firstName.value) && isEmpty(lastName.value) && isEmpty(email.value)) {
+    if (
+      isEmpty(firstName.value) &&
+      isEmpty(lastName.value) &&
+      isEmpty(email.value)
+    ) {
       toast.error("Please fill in at least one field (name or email).");
       return;
     }
 
     // name Update Flow
-    if (!isEmpty(firstName.value) && !isEmpty(lastName.value) && isNameChanged) {
+    if (
+      !isEmpty(firstName.value) &&
+      !isEmpty(lastName.value) &&
+      isNameChanged
+    ) {
       const validatedFields = validateFormFields(firstName, lastName);
       updateFieldsByName(validatedFields, setFields);
 
       const hasError = validatedFields.some((field) => field.isErr);
       if (!hasError) {
-        const success = await changeName(firstName.value, lastName.value, currentUser);
+        const success = await changeName(
+          firstName.value,
+          lastName.value,
+          currentUser
+        );
         if (success) router.push("/profile");
       }
     }
@@ -125,7 +137,12 @@ export default function useEditProfileLogic() {
 
       const hasError = validatedFields.some((field) => field.isErr);
       if (!hasError) {
-        const success = await changeEmail(email.value, currentPassword.value, currentUser, setFields);
+        const success = await changeEmail(
+          email.value,
+          currentPassword.value,
+          currentUser,
+          setFields
+        );
         if (success) router.push("/profile");
       }
     }

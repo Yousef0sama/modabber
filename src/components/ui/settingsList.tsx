@@ -1,38 +1,32 @@
 "use client";
 
+// imports
+
 // hooks
-import { useState } from "react";
+import useMenu from "@/hooks/useMenu";
 import { useRouter } from "next/navigation";
-import useCurrentUser from "@/hooks/useCurrentUser";
 
 // firebase
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
 // components
-import { Avatar, Button, Menu, MenuItem, ListItemIcon, Divider } from "@mui/material";
+import {
+  Button,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+} from "@mui/material";
 import ThemeSwitcher from "./themeSwicher";
 
 // icons
-import { Logout, Person, Brightness4 } from "@mui/icons-material";
+import { Logout, Person, Brightness4, Settings } from "@mui/icons-material";
 
-export default function UserMenu() {
-  // state to store the anchor element for the menu (null means menu is closed)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+export default function SettingsList() {
 
+  const { anchorEl, open, handleClick, handleClose } = useMenu();
   const router = useRouter();
-
-  // get the current logged-in user info
-  const currentUser = useCurrentUser();
-
-  // open the menu by setting the anchor element
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  // close the menu by resetting the anchor element to null
-  const handleClose = () => setAnchorEl(null);
 
   // logout user, close menu and redirect to login page
   const handleLogout = () => {
@@ -47,18 +41,15 @@ export default function UserMenu() {
       <Button
         onClick={handleClick}
         startIcon={
-          <Avatar sx={{ width: 25, height: 25 }}>
-            {currentUser?.displayName?.[0] || ""}
-          </Avatar>
+          <Settings />
         }
         className="!capitalize !text-white"
       >
-        {currentUser?.displayName || "Account"}
+        settings
       </Button>
 
       {/* menu that shows profile, theme switcher, and logout */}
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-
         {/* profile menu item */}
         <MenuItem
           onClick={() => {
@@ -66,7 +57,9 @@ export default function UserMenu() {
             router.push("/profile");
           }}
         >
-          <ListItemIcon><Person fontSize="small" /></ListItemIcon>
+          <ListItemIcon>
+            <Person fontSize="small" />
+          </ListItemIcon>
           Profile
         </MenuItem>
 
@@ -74,7 +67,9 @@ export default function UserMenu() {
 
         {/* theme switcher menu item */}
         <MenuItem onClick={handleClose}>
-          <ListItemIcon><Brightness4 fontSize="small" /></ListItemIcon>
+          <ListItemIcon>
+            <Brightness4 fontSize="small" />
+          </ListItemIcon>
           <ThemeSwitcher color="primary" />
         </MenuItem>
 
@@ -82,7 +77,9 @@ export default function UserMenu() {
 
         {/* logout menu item */}
         <MenuItem onClick={handleLogout}>
-          <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
           Logout
         </MenuItem>
       </Menu>

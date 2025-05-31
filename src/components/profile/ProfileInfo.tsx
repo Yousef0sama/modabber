@@ -9,20 +9,23 @@ import { Button, Typography, Divider } from "@mui/material";
 import Link from "next/link";
 
 // icons
-import EmailIcon from '@mui/icons-material/Email';
-import PersonIcon from '@mui/icons-material/Person';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import CheckIcon from '@mui/icons-material/Check';
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import {
+  Email,
+  Person,
+  MonetizationOn,
+  Check,
+  Delete,
+  Edit,
+} from "@mui/icons-material";
 
 // utils
-import handleVerifyEmail from "@/utils/sendVerifyigMail"; // function to send email verification
+import handleVerifyEmail from "@/utils/sendVerifyMail"; // function to send email verification
+import deleteAccount from "@/utils/deleteAccount";
 
-/*
+/**
  * ProfileInfo component:
  * Displays user's name, email (with verification status), budget info, and edit profile link.
-*/
+ */
 export default function ProfileInfo() {
   // get current user from Firebase Auth
   const currentUser = useCurrentUser();
@@ -36,7 +39,7 @@ export default function ProfileInfo() {
     <>
       {/* User Name Section */}
       <div className="flex items-center gap-2 mt-4">
-        <PersonIcon color="primary" />
+        <Person color="primary" />
         <Typography variant="h6">{displayName || "No Name"}</Typography>
       </div>
 
@@ -44,7 +47,7 @@ export default function ProfileInfo() {
 
       {/* Email + Verification Section */}
       <div className="flex items-center gap-2 flex-wrap">
-        <EmailIcon color="primary" />
+        <Email color="primary" />
         <Typography className="text-[0.8rem]! sm:text-[1rem]!">
           {email || "No Email"}
         </Typography>
@@ -54,7 +57,7 @@ export default function ProfileInfo() {
           variant="contained"
           color="primary"
           onClick={() => handleVerifyEmail(currentUser)}
-          startIcon={emailVerified && <CheckIcon color="success" />}
+          startIcon={emailVerified && <Check color="success" />}
           disabled={emailVerified}
         >
           {emailVerified ? "Verified" : "Verify Email"}
@@ -66,15 +69,15 @@ export default function ProfileInfo() {
       {/* Financial Summary Section */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <MonetizationOnIcon color="primary" />
+          <MonetizationOn color="primary" />
           <Typography>Budget: {budget ?? 0}$</Typography>
         </div>
         <div className="flex items-center gap-2">
-          <MonetizationOnIcon color="primary" />
+          <MonetizationOn color="primary" />
           <Typography>Total Income: {totalIncome ?? 0}$</Typography>
         </div>
         <div className="flex items-center gap-2">
-          <MonetizationOnIcon color="primary" />
+          <MonetizationOn color="primary" />
           <Typography>Total Expense: {totalExpense ?? 0}$</Typography>
         </div>
       </div>
@@ -85,15 +88,15 @@ export default function ProfileInfo() {
         role="button"
         className="flex items-center gap-2 mt-4 bg-primary text-white p-2 rounded-md w-fit"
       >
-        <EditIcon />
+        <Edit />
         Edit Profile
       </Link>
       <Button
         variant="contained"
         color="error"
         className="w-fit"
-        onClick={() => {}}
-        startIcon={<DeleteIcon />}
+        onClick={() => deleteAccount(currentUser)}
+        startIcon={<Delete />}
       >
         delete account
       </Button>

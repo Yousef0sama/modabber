@@ -17,8 +17,10 @@ import { User } from "firebase/auth";
  *
  * @param currentUser - The currently authenticated user
  * @returns boolean indicating success or failure
-*/
-export default async function deleteAccount(currentUser: User | null): Promise<boolean> {
+ */
+export default async function deleteAccount(
+  currentUser: User | null
+): Promise<boolean> {
   try {
     // 1. Check if a user is logged in
     if (!currentUser) {

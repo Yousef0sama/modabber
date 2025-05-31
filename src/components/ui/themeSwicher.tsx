@@ -10,7 +10,14 @@ import { useThemeMode } from "@/hooks/useThemeMode";
 import { Switch, Skeleton } from "@mui/material";
 
 // interfaces
-type ColorType = "primary" | "secondary" | "error" | "info" | "success" | "warning" | "default";
+type ColorType =
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning"
+  | "default";
 
 interface Props {
   color?: ColorType;
@@ -34,11 +41,5 @@ export default function ThemeSwitcher({ color = "primary" }: Props) {
   }
 
   // render the switch with the current mode and toggle handler
-  return (
-    <Switch
-      color={color}
-      checked={mode === "dark"}
-      onChange={toggle}
-    />
-  );
+  return <Switch color={color} checked={mode === "dark"} onChange={toggle} />;
 }

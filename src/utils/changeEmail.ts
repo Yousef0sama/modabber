@@ -33,7 +33,7 @@ export default async function changeEmail(
   newEmail: string,
   currentPassword: string,
   user: User,
-  setFields: React.Dispatch<React.SetStateAction<InputField[]>>,
+  setFields: React.Dispatch<React.SetStateAction<InputField[]>>
 ): Promise<boolean> {
   try {
     // 1. Check if the new email is already taken
@@ -47,14 +47,17 @@ export default async function changeEmail(
                 isErr: true,
                 error: "This email is already in use.",
               }
-            : field,
+            : field
         )
       );
       return false;
     }
 
     // 2. Re-authenticate user
-    const credential = EmailAuthProvider.credential(user.email!, currentPassword);
+    const credential = EmailAuthProvider.credential(
+      user.email!,
+      currentPassword
+    );
     await reauthenticateWithCredential(user, credential);
 
     // 3. Update email in Firebase Auth
@@ -83,7 +86,7 @@ export default async function changeEmail(
                 isErr: true,
                 error: "Wrong password",
               }
-            : field,
+            : field
         )
       );
       return false;

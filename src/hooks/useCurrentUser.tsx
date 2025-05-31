@@ -15,7 +15,9 @@ export default function useCurrentUser() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => setCurrentUser(user));
+    const unsubscribe = onAuthStateChanged(auth, (user) =>
+      setCurrentUser(user)
+    );
     return () => unsubscribe();
   }, []);
 

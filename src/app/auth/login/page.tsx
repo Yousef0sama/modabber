@@ -7,9 +7,8 @@ import { useRouter } from "next/navigation";
 // Components
 import Container from "@/components/container";
 import FetchFields from "@/components/fetch/fetchFields";
-import Button from "@mui/material/Button";
 import Link from "next/link";
-import { Checkbox, Divider, FormControlLabel } from "@mui/material";
+import { Checkbox, Divider, FormControlLabel, Button } from "@mui/material";
 
 // Providers
 import ThemeProviderWraper from "@/providers/themeProvider";
@@ -21,12 +20,7 @@ import { Google } from "@mui/icons-material";
 import handleGoogle from "@/utils/signWithGoogle";
 
 export default function Login() {
-  const {
-    setRemember,
-    fields,
-    handleChange,
-    handleSubmit,
-  } = useLoginLogic();
+  const { setRemember, fields, handleChange, handleSubmit } = useLoginLogic();
 
   const router = useRouter();
 

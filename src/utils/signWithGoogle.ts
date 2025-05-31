@@ -30,4 +30,4 @@ export default async function handleGoogle(): Promise<boolean> {
     toast.error("Login failed: " + (error as Error).message);
     return false;
   }
-};
+}

@@ -18,12 +18,12 @@ export default async function createUserIfNotExist(user: User) {
   // 3. If it doesn't exist, create it with default values
   if (!userSnap.exists()) {
     await setDoc(userRef, {
-      displayName: user.displayName,     // User's display name
-      email: user.email,                 // User's email
-      createdAt: serverTimestamp(),      // Timestamp for when the user was created
-      totalIncome: 0,                    // Default total income
-      totalExpense: 0,                   // Default total expense
-      budget: 0,                         // Default budget
+      displayName: user.displayName, // User's display name
+      email: user.email, // User's email
+      createdAt: serverTimestamp(), // Timestamp for when the user was created
+      totalIncome: 0, // Default total income
+      totalExpense: 0, // Default total expense
+      budget: 0, // Default budget
     });
   }
 }

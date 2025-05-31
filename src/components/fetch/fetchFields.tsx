@@ -1,11 +1,15 @@
+// imports
+
 // Components
-import TextField from "@mui/material/TextField";
+import { TextField } from "@mui/material";
 
 // Interfaces
 import { InputField } from "@/interfaces/interfaces";
 
-// Helpers
+// consts
 import { labelsMap } from "@/constants/labels";
+
+// utils
 import { getInputType, getAutoComplete } from "@/utils/fields";
 
 type Props = {

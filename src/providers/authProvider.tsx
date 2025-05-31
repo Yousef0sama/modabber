@@ -4,10 +4,9 @@
 import useAuthListener from "@/hooks/useAuthListener";
 
 // interfaces
-import { ReactNode } from "react";
 
 type Props = {
-  readonly children: ReactNode;
+  readonly children: React.ReactNode;
 };
 
 export default function AuthProvider({ children }: Props) {

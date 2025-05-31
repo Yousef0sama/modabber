@@ -13,7 +13,7 @@ export const getWaitTime = (attempt: number): number => {
   const seconds = [30, 60, 90, 120, 300];
 
   // Return corresponding wait time or default to 480 seconds (8 minutes)
-  return (seconds[attempt]) * 1000;
+  return seconds[attempt] * 1000;
 };
 
 /**
