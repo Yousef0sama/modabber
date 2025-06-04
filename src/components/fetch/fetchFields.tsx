@@ -1,57 +1,69 @@
-// imports
+// ===================== Imports ===================== //
 
 // Components
-import { TextField } from "@mui/material";
+import RenderField from "@/components/renders/renderField";
 
 // Interfaces
 import { InputField } from "@/interfaces/interfaces";
+import { JSX } from "react";
 
-// consts
-import { labelsMap } from "@/constants/labels";
+// ===================== Props Interface ===================== //
 
-// utils
-import { getInputType, getAutoComplete } from "@/utils/fields";
-
-type Props = {
+interface FetchFieldsProps {
   fields: InputField[];
   handleChange: (index: number, value: string) => void;
-  inlineFields?: number[]; // indexes of fields to display inline
-};
+  inlineFields?: number[]; // Indexes of fields to render inline
+}
 
+// ===================== Component ===================== //
+
+/**
+ * FetchFields Component
+ *
+ * @component
+ * @description
+ * Renders a dynamic list of input fields using the `RenderField` component.
+ * Allows for specific fields (by index) to be rendered inline (horizontally),
+ * while others are rendered in a vertical stack.
+ *
+ * @param {InputField[]} fields - Array of field configuration objects to render.
+ * @param {(index: number, value: string) => void} handleChange - Callback to handle field input changes.
+ * @param {number[]} [inlineFields=[]] - Optional array of field indexes to display inline (side-by-side).
+ *
+ * @returns {JSX.Element} A list of rendered input fields, some inline and some stacked vertically.
+ */
 export default function FetchFields({
   fields,
   handleChange,
   inlineFields = [],
-}: Props) {
-  const renderField = (field: InputField, index: number) => (
-    <TextField
-      key={field.name}
-      label={labelsMap[field.name] || field.name}
-      id={field.name}
-      name={field.name}
-      type={getInputType(field.name)}
-      variant="standard"
-      size="small"
-      fullWidth
-      value={field.value}
-      error={field.isErr}
-      helperText={field.error}
-      autoComplete={getAutoComplete(field.name)}
-      onChange={(e) => handleChange(index, e.target.value)}
-    />
-  );
-
+}: FetchFieldsProps): JSX.Element {
   return (
     <>
+      {/* Inline fields section */}
       {inlineFields.length > 0 && (
         <div className="flex flex-col sm:flex-row gap-8 w-full">
-          {inlineFields.map((i) => renderField(fields[i], i))}
+          {inlineFields.map((i) => (
+            <RenderField
+              key={fields[i].name}
+              field={fields[i]}
+              handleChange={handleChange}
+              index={i}
+            />
+          ))}
         </div>
       )}
 
+      {/* Remaining fields */}
       {fields.map((field, i) => {
         if (inlineFields.includes(i)) return null;
-        return renderField(field, i);
+        return (
+          <RenderField
+            key={field.name}
+            field={field}
+            handleChange={handleChange}
+            index={i}
+          />
+        );
       })}
     </>
   );

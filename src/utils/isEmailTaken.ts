@@ -1,17 +1,21 @@
-// Imports
+// ===================== Imports ===================== //
 
-// firebase
+// Firebase
 import { fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
+// ===================== Utility ===================== //
+
 /**
- * Checks if the given email is already associated with an existing account.
+ * isEmailTaken
  *
- * Uses Firebase Auth's `fetchSignInMethodsForEmail` to determine
- * whether the email is in use.
+ * @description
+ * - Checks if the given email is already associated with an existing account.
+ * - Uses Firebase Auth's `fetchSignInMethodsForEmail` to determine
+ * - whether the email is in use.
  *
- * @param email - The email address to check.
- * @returns A boolean indicating if the email is already taken.
+ * @param {string} email - The email address to check.
+ * @returns {Promise<boolean>} - A boolean indicating if the email is already taken.
  */
 export default async function isEmailTaken(email: string): Promise<boolean> {
   try {

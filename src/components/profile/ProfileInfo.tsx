@@ -1,61 +1,67 @@
-// imports
+// ===================== Imports ===================== //
 
-// hooks
+// Hooks
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserProfile from "@/hooks/useUserProfile";
 
-// components
+// Components
 import { Button, Typography, Divider } from "@mui/material";
-import Link from "next/link";
 
-// icons
+// Icons
 import {
   Email,
   Person,
   MonetizationOn,
   Check,
-  Delete,
-  Edit,
 } from "@mui/icons-material";
 
-// utils
-import handleVerifyEmail from "@/utils/sendVerifyMail"; // function to send email verification
-import deleteAccount from "@/utils/deleteAccount";
+// Utils
+import handleVerifyEmail from "@/utils/sendVerifyMail";
+
+// Interfaces
+import { JSX } from "react";
+
+
+// ===================== Component ===================== //
 
 /**
- * ProfileInfo component:
- * Displays user's name, email (with verification status), budget info, and edit profile link.
+ * ProfileInfo component.
+ *
+ * @component
+ * @description
+ * Displays current user's profile information including name, email (with verification status),
+ * budget, total income, and total expense.
+ *
+ * @returns {JSX.Element} Rendered profile information section.
+ *
  */
-export default function ProfileInfo() {
-  // get current user from Firebase Auth
+export default function ProfileInfo() : JSX.Element {
+
   const currentUser = useCurrentUser();
   const { uid, displayName, email, emailVerified } = currentUser || {};
 
-  // get user profile data from Firestore using custom hook
   const { data: userProfile } = useUserProfile(uid);
-  const { budget, totalIncome, totalExpense } = userProfile || {};
+  const { budget = 0, totalIncome = 0, totalExpense = 0 } = userProfile || {};
 
   return (
     <>
-      {/* User Name Section */}
+      {/* Name Section */}
       <div className="flex items-center gap-2 mt-4">
         <Person color="primary" />
         <Typography variant="h6">{displayName || "No Name"}</Typography>
       </div>
 
-      <Divider />
+      <Divider className="my-2" />
 
-      {/* Email + Verification Section */}
+      {/* Email Section */}
       <div className="flex items-center gap-2 flex-wrap">
         <Email color="primary" />
-        <Typography className="text-[0.8rem]! sm:text-[1rem]!">
-          {email || "No Email"}
-        </Typography>
+        <Typography variant="body1">{email || "No Email"}</Typography>
 
-        {/* Verification Button */}
         <Button
           variant="contained"
           color="primary"
+          size="small"
           onClick={() => handleVerifyEmail(currentUser)}
           startIcon={emailVerified && <Check color="success" />}
           disabled={emailVerified}
@@ -64,42 +70,23 @@ export default function ProfileInfo() {
         </Button>
       </div>
 
-      <Divider />
+      <Divider className="my-2" />
 
-      {/* Financial Summary Section */}
+      {/* Budget Section */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <MonetizationOn color="primary" />
-          <Typography>Budget: {budget ?? 0}$</Typography>
+          <Typography variant="body1">Budget: {budget}$</Typography>
         </div>
         <div className="flex items-center gap-2">
           <MonetizationOn color="primary" />
-          <Typography>Total Income: {totalIncome ?? 0}$</Typography>
+          <Typography variant="body1">Total Income: {totalIncome}$</Typography>
         </div>
         <div className="flex items-center gap-2">
           <MonetizationOn color="primary" />
-          <Typography>Total Expense: {totalExpense ?? 0}$</Typography>
+          <Typography variant="body1">Total Expense: {totalExpense}$</Typography>
         </div>
       </div>
-
-      {/* Edit Profile Link */}
-      <Link
-        href={`/profile/edit`} // navigate to edit profile page
-        role="button"
-        className="flex items-center gap-2 mt-4 bg-primary text-white p-2 rounded-md w-fit"
-      >
-        <Edit />
-        Edit Profile
-      </Link>
-      <Button
-        variant="contained"
-        color="error"
-        className="w-fit"
-        onClick={() => deleteAccount(currentUser)}
-        startIcon={<Delete />}
-      >
-        delete account
-      </Button>
     </>
   );
 }

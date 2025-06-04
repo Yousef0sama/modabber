@@ -1,6 +1,6 @@
-// imports
+// ===================== Imports ===================== //
 
-// firebase
+// Firebase
 import {
   signInWithEmailAndPassword,
   setPersistence,
@@ -9,30 +9,37 @@ import {
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
-// toast
+// Toast
 import { toast } from "react-hot-toast";
 
 // Utilities
 import createUserIfNotExist from "./createUser";
 import { createNotification } from "@/utils/notifications";
 
-// interfaces
+// Interfaces
 import { Dispatch, SetStateAction } from "react";
 import { InputField } from "@/interfaces/interfaces";
 
+// ===================== Utility ===================== //
+
 /**
- * Handles user login with email and password using Firebase Authentication.
+ * handleLogin
  *
- * @param fields - Array of input fields containing email and password values.
- * @param setFields - React state setter to update fields, mainly for showing validation errors.
- * @param remember - Boolean indicating whether to persist login across sessions (localStorage) or just current session.
- * @returns A Promise resolving to true if login succeeds, false otherwise.
+ * @description
+ * - Handles user login with email and password using Firebase Authentication.
+ * - Sets persistence mode based on user preference (remember me or session only).
+ * - Validates input fields and provides feedback via toasts.
+ * - Behavior:
+ *   - Sets persistence mode.
+ *   - Extracts email/password from input fields.
+ *   - Attempts sign-in with Firebase.
+ *   - Shows relevant toasts or validation errors.
+ *   - Creates user in database if not already present.
  *
- * Behavior:
- * - Sets persistence based on 'remember' flag.
- * - Extracts email and password from input fields.
- * - Attempts login via Firebase.
- * - On failure, marks all fields as error if credentials invalid, or shows generic error toast.
+ * @param {InputField[]} fields - Array of input fields containing email and password values.
+ * @param {Dispatch<SetStateAction<InputField[]>>} setFields - React state setter to update fields for validation errors.
+ * @param {boolean} remember - Whether to persist login across sessions (localStorage) or just the current session.
+ * @returns {Promise<boolean>} - Resolves to true if login succeeds, false otherwise.
  */
 export default async function handleLogin(
   fields: InputField[],
@@ -46,24 +53,24 @@ export default async function handleLogin(
       remember ? browserLocalPersistence : browserSessionPersistence
     );
 
-    // Helper function to get value from fields by name
+    // Helper to get field value by name
     const getFieldValue = (name: string) =>
       fields.find((field) => field.name === name)!.value;
 
     const email = getFieldValue("email");
     const password = getFieldValue("password");
 
-    // Perform sign-in with email and password
+    // Perform sign-in
     const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    // Create user in Firestore if they don't exist
+    // Create user in DB if not exists
     createUserIfNotExist(user);
 
-    // Notify user of successful login
+    // Show success toast
     toast.success("Logged in successfully");
 
-    // Create a notification for verification if the user is not verified
-    if (user.emailVerified === false) {
+    // Notify unverified users
+    if (!user.emailVerified) {
       await createNotification(
         user.uid,
         "Welcome!",
@@ -75,17 +82,24 @@ export default async function handleLogin(
   } catch (error) {
     const code = (error as { code?: string }).code;
 
-    // Handle invalid credentials error specifically
+    // Reset all fields to remove previous errors
+    setFields((prev) =>
+      prev.map((field) => ({
+        ...field,
+        isErr: false,
+        error: "",
+      }))
+    );
+    // Handle specific error codes
     if (code === "auth/invalid-credential") {
-      setFields((prevFields) =>
-        prevFields.map((field) => ({
+      setFields((prev) =>
+        prev.map((field) => ({
           ...field,
           isErr: true,
           error: "Invalid email or password",
         }))
       );
     } else {
-      // Fallback for other errors
       toast.error("Login failed. Please try again later");
       console.error("Login error:", code);
     }

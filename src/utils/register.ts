@@ -1,69 +1,70 @@
-// imports
+// ===================== Imports ===================== //
 
-// firebase
+// Firebase
 import { auth } from "@/lib/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
-// utilities
+// Utilities
 import createUserIfNotExist from "./createUser";
 import { createNotification } from "@/utils/notifications";
 
-// toast
+// Toast
 import { toast } from "react-hot-toast";
 
-// interfaces
+// Interfaces
 import { InputField } from "@/interfaces/interfaces";
 import { Dispatch, SetStateAction } from "react";
 
+// ===================== Functions ===================== //
+
 /**
- * Handles user registration by creating a new Firebase Auth user with email and password,
- * then updating the user's profile with their full name.
+ * handleRegister
  *
- * @param fields - Array of input fields containing user registration data.
- * @param setFields - React state setter to update input fields, mainly for error handling.
- * @returns A Promise that resolves to true on successful registration, false on failure.
+ * @description
+ * - Registers a new user using Firebase Authentication with email and password.
+ * - Updates the user's display name using first and last name.
+ * - Creates a Firestore user document if it does not exist.
+ * - Sends a welcome notification if the user's email is not verified.
+ * - Handles errors such as 'email already in use' by updating form field errors.
  *
- * Behavior:
- * - Extracts email, password, firstName, and lastName from input fields.
- * - Creates user account with Firebase Auth.
- * - Updates the user's display name.
- * - Shows success toast on success.
- * - Handles 'email already in use' error by marking the email field with an error.
- * - Shows generic error toast for other failures.
+ * @param {InputField[]} fields - Array of input fields with user data.
+ * @param {Dispatch<SetStateAction<InputField[]>>} setFields - Setter function to update form fields state.
+ * @returns {Promise<boolean>} - Returns true if registration succeeds, otherwise false.
  */
 export default async function handleRegister(
   fields: InputField[],
   setFields: Dispatch<SetStateAction<InputField[]>>
 ): Promise<boolean> {
   try {
-    // Helper to get field value by name or empty string if not found
+    // Helper to get a value from the input fields array by name
     const getFieldValue = (name: string) =>
       fields.find((field) => field.name === name)?.value || "";
 
+    // Extract user input values
     const email = getFieldValue("email");
     const password = getFieldValue("password");
     const firstName = getFieldValue("firstName");
     const lastName = getFieldValue("lastName");
 
-    // Create user with email and password in Firebase
+    // Create new user with Firebase Auth
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
 
-    // Update user's display name with first and last name
+    // Update user profile displayName
     await updateProfile(userCredential.user, {
       displayName: `${firstName} ${lastName}`.trim(),
     });
 
-    // Create user in Firestore if they don't exist
+    // Create user document in Firestore if not exist
     createUserIfNotExist(userCredential.user);
 
-    // Notify user of successful registration
+    // Show success toast notification
     toast.success("User registered successfully");
 
-    // Create a notification for verification if the user is not verified
+    // Create email verification notification if email is not verified
     if (userCredential.user.emailVerified === false) {
       await createNotification(
         userCredential.user.uid,
@@ -72,11 +73,12 @@ export default async function handleRegister(
       );
     }
 
+    // Return success status
     return true;
   } catch (error: unknown) {
     const code = (error as { code?: string }).code;
 
-    // Handle email already in use error
+    // Handle specific Firebase auth errors
     if (code === "auth/email-already-in-use") {
       setFields((prevFields) =>
         prevFields.map((field) =>
@@ -90,11 +92,12 @@ export default async function handleRegister(
         )
       );
     } else {
-      // General error fallback
+      // Handle generic errors
       toast.error("Registration failed. Please try again later");
       console.error("Registration error:", error);
     }
 
+    // Return failure status
     return false;
   }
 }

@@ -1,5 +1,7 @@
 "use client";
 
+// ===================== Imports ===================== //
+
 // Hooks
 import useLoginLogic from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
@@ -19,10 +21,31 @@ import { Google } from "@mui/icons-material";
 // Utilities
 import handleGoogle from "@/utils/signWithGoogle";
 
-export default function Login() {
-  const { setRemember, fields, handleChange, handleSubmit } = useLoginLogic();
+// Interfaces
+import { JSX } from "react";
 
+// ===================== Component ===================== //
+
+/**
+ * Login component - Renders a login form with email/password and Google authentication.
+ *
+ * @component
+ * @returns {JSX.Element} Login form UI with "Remember Me", password reset, and Google login support.
+ *
+ * @description
+ * - Uses `useLoginLogic` hook to manage:
+ *    - `fields`: array of input field objects (email, password)
+ *    - `handleChange(index, value)`: updates a field's value
+ *    - `handleSubmit(event)`: handles form submission
+ *    - `setRemember(checked: boolean)`: toggles "Remember me" option
+ *
+ * - Uses `handleGoogle()` for Google authentication
+ * - Redirects to home on successful login
+ * - Responsive and styled using Tailwind + MUI
+ */
+export default function Login(): JSX.Element {
   const router = useRouter();
+  const { setRemember, fields, handleChange, handleSubmit } = useLoginLogic();
 
   return (
     <Container className="flex justify-center items-center p-4">
@@ -33,17 +56,18 @@ export default function Login() {
           onSubmit={handleSubmit}
           className="card flex-col gap-6"
         >
+          {/* Title */}
           <h2 className="text-xl">Sign in to your account</h2>
 
-          {/* Render input fields dynamically */}
+          {/* Input Fields */}
           <FetchFields fields={fields} handleChange={handleChange} />
 
-          {/* Submit button */}
+          {/* Submit Button */}
           <Button variant="contained" type="submit" fullWidth>
             Log in
           </Button>
 
-          {/* Remember me checkbox and forgot password link */}
+          {/* Remember Me + Forgot Password */}
           <div className="flex justify-between items-center w-full">
             <FormControlLabel
               control={
@@ -63,10 +87,10 @@ export default function Login() {
             </Link>
           </div>
 
-          {/* Divider for alternative login options */}
+          {/* Divider */}
           <Divider className="text-xs w-full">OR</Divider>
 
-          {/* Google sign-in button */}
+          {/* Google Sign-In */}
           <Button
             variant="outlined"
             startIcon={<Google />}
@@ -79,9 +103,9 @@ export default function Login() {
             Continue with Google
           </Button>
 
-          {/* Link to registration page */}
+          {/* Sign Up Link */}
           <p className="center text-sm">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?&nbsp;
             <Link
               href="/auth/register"
               className="text-primary hover:text-hover"

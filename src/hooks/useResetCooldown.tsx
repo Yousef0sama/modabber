@@ -1,26 +1,36 @@
-// imports
+// ========== Imports ========== //
 
-// hooks
+// Hooks
 import { useEffect, useState } from "react";
 
 // Utilities
 import { getWaitTime } from "@/utils/countdown";
 
+// ========== Hook ========== //
+
 /**
- * Custom hook to manage cooldown logic for password reset attempts.
- * Tracks the number of attempts, enforces wait time between attempts,
- * and provides a countdown timer until the next allowed attempt.
+ * @hook
+ * useResetCooldown
  *
- * @returns { countdown, attempts, registerAttempt }
- * countdown: seconds remaining until next attempt allowed
- * attempts: current number of password reset attempts
- * registerAttempt: function to call when a new reset attempt is made
+ * @description
+ * Custom hook to manage cooldown logic for password reset attempts.
+ * Handles:
+ * - Countdown timer for next allowed attempt.
+ * - Tracks number of attempts.
+ * - Enforces wait time between attempts.
+ * - Provides countdown timer until next allowed attempt.
+ *
+ * @returns {{
+ *  countdown: number, // seconds remaining until next attempt allowed
+ *  attempts: number,  // current number of attempts
+ *  registerAttempt: () => void // function to register a new attempt
+ * }}
  */
 export default function useResetCooldown() {
   const [countdown, setCountdown] = useState(0);
   const [attempts, setAttempts] = useState(0);
 
-  // Initialize attempts and countdown from localStorage on component mount
+  // Initialize attempts and countdown from localStorage on mount
   useEffect(() => {
     const savedAttempts = Number(localStorage.getItem("fp_attempts") || "0");
     const expireTime = Number(localStorage.getItem("fp_expireTime") || "0");
@@ -29,13 +39,13 @@ export default function useResetCooldown() {
     setAttempts(savedAttempts);
 
     if (expireTime > now) {
-      // Calculate remaining cooldown time in seconds
+      // Calculate remaining cooldown in seconds
       const remainingSeconds = Math.ceil((expireTime - now) / 1000);
       setCountdown(remainingSeconds);
     }
   }, []);
 
-  // Countdown timer effect, updates every second until countdown reaches zero
+  // Countdown timer updates every second until zero
   useEffect(() => {
     if (countdown <= 0) return;
 
@@ -53,7 +63,7 @@ export default function useResetCooldown() {
   }, [countdown]);
 
   /**
-   * Call this function when a new password reset attempt is made.
+   * Register a new password reset attempt.
    * Updates attempts count and cooldown expiration time.
    */
   const registerAttempt = () => {
@@ -61,7 +71,7 @@ export default function useResetCooldown() {
     setAttempts(newAttempts);
     localStorage.setItem("fp_attempts", String(newAttempts));
 
-    const waitTime = getWaitTime(newAttempts - 1); // wait time based on previous attempts
+    const waitTime = getWaitTime(newAttempts - 1); // based on previous attempts
     const expireAt = Date.now() + waitTime;
     localStorage.setItem("fp_expireTime", String(expireAt));
 

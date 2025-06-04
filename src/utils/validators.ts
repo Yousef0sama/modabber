@@ -1,7 +1,13 @@
+// ===================== Validators ===================== //
+
 /**
- * Checks if the input string is empty or contains only whitespace.
- * @param input - The string to check.
- * @returns An error message if empty, otherwise an empty string.
+ * isEmpty
+ *
+ * @description
+ * - Checks if the input string is empty or contains only whitespace.
+ *
+ * @param {string} input - The string to check.
+ * @returns {string} - Returns an error message if empty, else empty string.
  */
 export function isEmpty(input: string): string {
   if (!input.trim()) {
@@ -11,9 +17,13 @@ export function isEmpty(input: string): string {
 }
 
 /**
- * Validates if the input string is a valid email format.
- * @param email - The email string to validate.
- * @returns An error message if invalid, otherwise an empty string.
+ * isEmail
+ *
+ * @description
+ * - Validates if the input string is a valid email format.
+ *
+ * @param {string} email - The email string to validate.
+ * @returns {string} - Returns an error message if invalid, else empty string.
  */
 export function isEmail(email: string): string {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -24,10 +34,14 @@ export function isEmail(email: string): string {
 }
 
 /**
- * Validates if the name contains only letters and is between 2 to 50 characters.
- * Supports Unicode letters.
- * @param name - The name string to validate.
- * @returns An error message if invalid, otherwise an empty string.
+ * isNameValid
+ *
+ * @description
+ * - Validates if the name contains only letters and is between 2 to 50 characters.
+ * - Supports Unicode letters.
+ *
+ * @param {string} name - The name string to validate.
+ * @returns {string} - Returns an error message if invalid, else empty string.
  */
 export function isNameValid(name: string): string {
   const nameRegex = /^[\p{L}]{2,50}$/u;
@@ -38,30 +52,42 @@ export function isNameValid(name: string): string {
 }
 
 /**
- * Validates the password to ensure it contains:
- * - At least one uppercase letter
- * - At least one lowercase letter
- * - At least one number
- * - At least one special character (!@#$%&*?)
- * - Length between 8 to 20 characters
- * @param password - The password string to validate.
- * @returns An error message if invalid, otherwise an empty string.
+ * isPasswordValid
+ *
+ * @description
+ * - Validates the password to ensure it contains:
+ *   - At least one uppercase letter
+ *   - At least one lowercase letter
+ *   - At least one number
+ *   - At least one special character (!@#$%&*?)
+ *   - Length between 8 to 20 characters
+ *
+ * @param {string} password - The password string to validate.
+ * @returns {string} - Returns an error message if invalid, else empty string.
  */
 export function isPasswordValid(password: string): string {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&*?])[A-Za-z\d@#$!%*?&]{8,20}$/;
   if (!passwordRegex.test(password)) {
-    return "Password must have:\n- Upper case letter\n- Lower case letter\n- Number\n- Special character (!@#$%&*?)";
+    return `Password must have:
+- Upper case letter
+- Lower case letter
+- Number
+- Special character (!@#$%&*?)`;
   }
   return "";
 }
 
 /**
- * Checks if the trimmed string length is within a specified range.
- * @param str - The string to check.
- * @param minLength - Minimum length inclusive.
- * @param maxLength - Maximum length inclusive.
- * @returns An error message if length is out of range, otherwise an empty string.
+ * checkLength
+ *
+ * @description
+ * - Checks if the trimmed string length is within a specified range.
+ *
+ * @param {string} str - The string to check.
+ * @param {number} minLength - Minimum length inclusive.
+ * @param {number} maxLength - Maximum length inclusive.
+ * @returns {string} - Returns an error message if length is out of range, else empty string.
  */
 export function checkLength(
   str: string,

@@ -1,22 +1,34 @@
-// imports
+// ===================== Imports ===================== //
 
-// hooks
+// Hooks
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
-// firebase
+// Firebase
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
+
+// ===================== Hook ===================== //
+
 /**
- * Client-side hook to manage user redirection based on authentication status and current route.
- * Hook to manage user redirection based on auth status and current route.
+ * @hook
+ * useAuthListener
  *
- * Redirects:
- * - If NOT logged in and tries to access any page NOT under /auth/*, redirect to /auth/login
- * - If logged in and tries to access any page under /auth/*, redirect to /
+ * @description
+ * Custom hook to handle user redirection based on authentication status.
+ *
+ * Behavior:
+ * - If the user is **not logged in** and tries to access any route **outside** `/auth/*`,
+ *   they are redirected to `/auth/login`.
+ * - If the user **is logged in** and tries to access any route **inside** `/auth/*`,
+ *   they are redirected to the home page `/`.
+ *
+ * This hook is meant to be used on client-side pages to guard routes via Firebase auth.
+ *
+ * @returns {void}
  */
-export default function useAuthListener() {
+export default function useAuthListener(): void {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -25,10 +37,10 @@ export default function useAuthListener() {
       const isAuthPage = pathname.startsWith("/auth");
 
       if (!user && !isAuthPage) {
-        // Not logged in & trying to visit protected page → redirect to login
+        // Not logged in and visiting a protected route → redirect to login
         router.push("/auth/login");
       } else if (user && isAuthPage) {
-        // Logged in & trying to visit auth pages → redirect to home
+        // Logged in and visiting an auth route → redirect to home
         router.push("/");
       }
     });

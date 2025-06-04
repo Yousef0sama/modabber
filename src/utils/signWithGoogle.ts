@@ -1,32 +1,41 @@
-// imports
+// ===================== Imports ===================== //
 
-// firebase
+// Firebase
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 
 // Utilities
 import createUserIfNotExist from "./createUser";
 
-// toast
+// Toast
 import { toast } from "react-hot-toast";
 
+// ===================== Functions ===================== //
+
 /**
- * Handles user login via Google OAuth using Firebase's popup method.
+ * handleGoogle
  *
- * @returns A Promise that resolves to true if login succeeds, or false if it fails.
+ * @description
+ * - Handles user login via Google OAuth using Firebase's popup method.
+ * - On success, creates the user if not exist, shows success toast, and returns true.
+ * - On failure, shows error toast and returns false.
  *
- * Behavior:
- * - Opens a popup window for Google sign-in.
- * - On success, resolves true and shows success toast.
- * - On failure, shows error toast and resolves false.
+ * @returns {Promise<boolean>} - Resolves to true if login succeeds, false otherwise.
  */
 export default async function handleGoogle(): Promise<boolean> {
   try {
+    // Trigger Google sign-in popup
     const { user } = await signInWithPopup(auth, googleProvider);
+
+    // Create user in Firestore if not existing
     createUserIfNotExist(user);
+
+    // Show success notification
     toast.success("Logged in with Google successfully");
+
     return true;
   } catch (error) {
+    // Show error notification on failure
     toast.error("Login failed: " + (error as Error).message);
     return false;
   }

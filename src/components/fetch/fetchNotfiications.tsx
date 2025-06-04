@@ -1,35 +1,46 @@
-"use client";
+// ===================== Imports ===================== //
 
-// hooks
-import useNotifications from "@/hooks/useNotifications";
+// Components
+import { Menu, MenuItem } from "@mui/material";
+import RenderNotification from "@/components/renders/renderNotification";
 
-// components
-import { Button, Menu, MenuItem, ListItemIcon } from "@mui/material";
-
-// icons
-import { Delete } from "@mui/icons-material";
-
-// utils
-import formatDateTime from "@/utils/formatDate";
-
-// interfaces
+// Interfaces
 import { Notification } from "@/interfaces/interfaces";
+import { JSX } from "react";
 
-type FetchNotificationsProps = {
+// ===================== Props Interface ===================== //
+
+interface FetchNotificationsProps {
   notifications: Notification[];
   anchorEl: null | HTMLElement;
   open: boolean;
   handleClose: () => void;
-};
+}
+
+// ===================== Component ===================== //
+
+/**
+ * FetchNotifications Component
+ *
+ * @component
+ * @description
+ * Renders a dropdown menu containing a list of user notifications.
+ * If no notifications exist, a placeholder message is displayed.
+ *
+ * @param {Notification[]} notifications - Array of notification objects to display.
+ * @param {HTMLElement | null} anchorEl - The DOM element to anchor the menu to.
+ * @param {boolean} open - Whether the menu is currently open.
+ * @param {() => void} handleClose - Callback to close the menu.
+ *
+ * @returns {JSX.Element} A Material UI Menu component with notification items.
+ */
 
 export default function FetchNotifications({
   notifications,
   anchorEl,
   open,
   handleClose,
-}: FetchNotificationsProps) {
-  const { deleteNotification, markAsRead } = useNotifications();
-
+}: FetchNotificationsProps) : JSX.Element {
   return (
     <Menu
       anchorEl={anchorEl}
@@ -38,34 +49,13 @@ export default function FetchNotifications({
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       transformOrigin={{ vertical: "top", horizontal: "right" }}
     >
+      {/* Render notifications or a message if none */}
       {notifications.length > 0 ? (
-        notifications.map(({ id, title, message, read, createdAt }) => (
-          <MenuItem
-            key={id}
-            className={`!flex !justify-between ${
-              read ? "!bg-gray-200" : "!bg-white"
-            }`}
-            onClick={() => markAsRead(id)}
-          >
-            <div>
-              <strong>{title}</strong>
-              <div>{message}</div>
-              <small className="text-gray-500">
-                {formatDateTime(createdAt)}
-              </small>
-            </div>
-
-            <ListItemIcon className="!justify-end">
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteNotification(id);
-                }}
-              >
-                <Delete fontSize="small" color="error" />
-              </Button>
-            </ListItemIcon>
-          </MenuItem>
+        notifications.map((notification) => (
+          <RenderNotification
+            key={notification.id}
+            notification={notification}
+          />
         ))
       ) : (
         <MenuItem disabled className="text-gray-500">

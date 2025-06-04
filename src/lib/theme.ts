@@ -1,8 +1,12 @@
-// imports
+// ========== MUI Custom Theme ========== //
+
+// MUI
 import { createTheme } from "@mui/material/styles";
 
+// Constants
 const primaryColor = "#2563eb";
 
+// Light Mode Palette
 const lightPalette = {
   background: {
     default: "#f1f1f1",
@@ -16,6 +20,7 @@ const lightPalette = {
   },
 };
 
+// Dark Mode Palette
 const darkPalette = {
   background: {
     default: "#222222",
@@ -29,6 +34,7 @@ const darkPalette = {
   },
 };
 
+// Theme Generator
 export const getTheme = (mode: "light" | "dark") =>
   createTheme({
     palette: {
@@ -48,11 +54,9 @@ export const getTheme = (mode: "light" | "dark") =>
                 borderColor: mode === "dark" ? "#90caf9" : primaryColor,
               },
             },
-
             "& label.Mui-focused": {
               color: mode === "dark" ? "#90caf9" : primaryColor,
             },
-
             "& label": {
               color: mode === "dark" ? "#aaa" : "#333",
             },

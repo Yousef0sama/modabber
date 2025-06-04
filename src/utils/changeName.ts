@@ -1,21 +1,26 @@
-// imports
+// ===================== Imports ===================== //
 
-// firebase
+// Firebase
 import { updateProfile, User } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-// toast
+// Utilities
 import { toast } from "react-hot-toast";
 
-/**
-  * Updates the user's display name in both Firebase Auth and Firestore
-  @param firstName - User's first name
-  @param lastName - User's last name
-  @param user - Firebase User object
-  @returns boolean indicating success or failure
-*/
+// ===================== Function ===================== //
 
+/**
+ * changeName
+ *
+ * @description
+ * Updates the user's display name in both Firebase Authentication and Firestore.
+ *
+ * @param {string} firstName - User's first name.
+ * @param {string} lastName - User's last name.
+ * @param {User} user - The currently authenticated Firebase user.
+ * @returns {Promise<boolean>} Returns true if the update was successful, otherwise false.
+ */
 export default async function changeName(
   firstName: string,
   lastName: string,
@@ -29,16 +34,14 @@ export default async function changeName(
     await updateDoc(userRef, { displayName: fullName });
 
     // 2. Update displayName in Firebase Authentication
-    await updateProfile(user, {
-      displayName: fullName,
-    });
+    await updateProfile(user, { displayName: fullName });
 
     // 3. Show success toast
     toast.success("Name updated successfully");
 
     return true;
   } catch (error) {
-    // Handle error and show toast
+    // Log error and show error toast
     console.error("Error updating name:", error);
     toast.error("Failed to update name. Please try again.");
     return false;

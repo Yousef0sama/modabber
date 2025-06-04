@@ -1,16 +1,16 @@
 "use client";
 
-// imports
+// ===================== Imports ===================== //
 
-// hooks
+// Hooks
 import useMenu from "@/hooks/useMenu";
 import { useRouter } from "next/navigation";
 
-// firebase
+// Firebase
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
-// components
+// Components
 import {
   Button,
   Menu,
@@ -20,15 +20,31 @@ import {
 } from "@mui/material";
 import ThemeSwitcher from "./themeSwicher";
 
-// icons
+// Icons
 import { Logout, Person, Brightness4, Settings } from "@mui/icons-material";
 
-export default function SettingsList() {
+// Interfaces
+import { JSX } from "react";
 
+// ===================== Component ===================== //
+
+/**
+ * SettingsList component.
+ *
+ * @component
+ * @description
+ * Displays a dropdown settings menu with options to navigate to the profile page,
+ * toggle the theme, and log out of the application.
+ *
+ * @returns {JSX.Element} The rendered settings button and dropdown menu.
+ */
+export default function SettingsList() : JSX.Element {
   const { anchorEl, open, handleClick, handleClose } = useMenu();
   const router = useRouter();
 
-  // logout user, close menu and redirect to login page
+  /**
+   * Logs out the current user, closes the menu, and redirects to the login page.
+   */
   const handleLogout = () => {
     signOut(auth);
     handleClose();
@@ -37,20 +53,18 @@ export default function SettingsList() {
 
   return (
     <div>
-      {/* button with avatar and user name to open the menu */}
+      {/* Button to open the settings menu */}
       <Button
         onClick={handleClick}
-        startIcon={
-          <Settings />
-        }
+        startIcon={<Settings />}
         className="!capitalize !text-white"
       >
         settings
       </Button>
 
-      {/* menu that shows profile, theme switcher, and logout */}
+      {/* Dropdown menu with profile, theme toggle, and logout options */}
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        {/* profile menu item */}
+        {/* Navigate to profile */}
         <MenuItem
           onClick={() => {
             handleClose();
@@ -65,7 +79,7 @@ export default function SettingsList() {
 
         <Divider />
 
-        {/* theme switcher menu item */}
+        {/* Theme switcher */}
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Brightness4 fontSize="small" />
@@ -75,7 +89,7 @@ export default function SettingsList() {
 
         <Divider />
 
-        {/* logout menu item */}
+        {/* Logout option */}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

@@ -1,11 +1,10 @@
-// imports
+// ===================== Imports ===================== //
 
-// firebase
+// Firebase
 import { db } from "@/lib/firebase";
 import {
   collection,
   query,
-  where,
   doc,
   getDocs,
   addDoc,
@@ -14,37 +13,46 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-// interfaces
+// Interfaces
 import { Notification } from "@/interfaces/interfaces";
 
+// ===================== Utilities ===================== //
+
 /**
- * Utility function to count unread notifications.
+ * unReadNotificationsCount
  *
- * @param notifications - Array of notification objects
- * @returns The count of unread notifications
+ * @description
+ * - Counts the number of unread notifications in an array.
+ *
+ * @param {Notification[]} notifications - Array of notifications
+ * @returns {number} - Count of unread notifications
  */
 export function unReadNotificationsCount(
   notifications: Notification[]
 ): number {
-  // Filter notifications to count only unread ones
   return notifications.filter((notification) => !notification.read).length;
 }
 
 /**
- * Fetches notifications for a specific user from Firestore.
+ * getNotifications
  *
- * @param userId - The user's UID
- * @returns An array of Notification objects
+ * @description
+ * - Fetches notifications from the user's subcollection "notifications".
+ * - Orders notifications by creation date descending.
+ *
+ * @param {string} userId - User's UID
+ * @returns {Promise<Notification[]>} - Array of notifications
  */
 export async function getNotifications(
   userId: string
 ): Promise<Notification[]> {
-  const q = query(
-    collection(db, "notifications"),
-    where("userId", "==", userId),
-    orderBy("createdAt", "desc")
-  );
+  // Reference to user's notifications subcollection
+  const notificationsRef = collection(db, "users", userId, "notifications");
 
+  // Query ordered by createdAt descending
+  const q = query(notificationsRef, orderBy("createdAt", "desc"));
+
+  // Get snapshot and map docs to Notification objects
   const snapshot = await getDocs(q);
   return snapshot.docs.map(
     (doc) => ({ id: doc.id, ...doc.data() } as Notification)
@@ -52,22 +60,26 @@ export async function getNotifications(
 }
 
 /**
- * Creates a new notification for a user in Firestore.
+ * createNotification
  *
- * @param userId - The user’s UID
- * @param title - Notification title
- * @param message - Notification message
+ * @description
+ * - Creates a new notification inside user's notifications subcollection.
+ * - Sets 'read' to false and uses Firestore server timestamp.
+ *
+ * @param {string} userId - User's UID
+ * @param {string} title - Notification title
+ * @param {string} message - Notification message
  */
-
-const date = Date.now();
-
 export async function createNotification(
   userId: string,
   title: string,
   message: string
-) {
-  await addDoc(collection(db, "notifications"), {
-    userId,
+): Promise<void> {
+  const notificationsRef = collection(db, "users", userId, "notifications");
+
+  const date = Date.now();
+  // Add new notification document with title, message, read status, and timestamp
+  await addDoc(notificationsRef, {
     title,
     message,
     read: false,
@@ -76,21 +88,47 @@ export async function createNotification(
 }
 
 /**
- * Marks a specific notification as read.
+ * markNotificationAsRead
  *
- * @param id - Notification document ID
+ * @description
+ * - Marks a notification as read inside user's notifications subcollection.
+ *
+ * @param {string} userId - User's UID
+ * @param {string} notificationId - Notification document ID
  */
-export async function markNotificationAsRead(id: string) {
-  const docRef = doc(db, "notifications", id);
-  await updateDoc(docRef, { read: true });
+export async function markNotificationAsRead(
+  userId: string,
+  notificationId: string
+): Promise<void> {
+  const notificationDocRef = doc(
+    db,
+    "users",
+    userId,
+    "notifications",
+    notificationId
+  );
+  await updateDoc(notificationDocRef, { read: true });
 }
 
 /**
- * Deletes a specific notification from Firestore.
+ * deleteNotification
  *
- * @param id - Notification document ID
+ * @description
+ * - Deletes a notification from user's notifications subcollection.
+ *
+ * @param {string} userId - User's UID
+ * @param {string} notificationId - Notification document ID
  */
-export async function deleteNotification(id: string) {
-  const docRef = doc(db, "notifications", id);
-  await deleteDoc(docRef);
+export async function deleteNotification(
+  userId: string,
+  notificationId: string
+): Promise<void> {
+  const notificationDocRef = doc(
+    db,
+    "users",
+    userId,
+    "notifications",
+    notificationId
+  );
+  await deleteDoc(notificationDocRef);
 }

@@ -1,15 +1,20 @@
 "use client";
 
-// imports
+// ===================== Imports ===================== //
 
-// hooks
+// Hooks
 import { useState, useEffect } from "react";
 import { useThemeMode } from "@/hooks/useThemeMode";
 
-// components
+// Components
 import { Switch, Skeleton } from "@mui/material";
 
-// interfaces
+// Interfaces
+import { JSX } from "react";
+
+/**
+ * Defines the allowed MUI color types for the switch.
+ */
 type ColorType =
   | "primary"
   | "secondary"
@@ -19,11 +24,27 @@ type ColorType =
   | "warning"
   | "default";
 
-interface Props {
+interface ThemeSwitcherProps {
   color?: ColorType;
 }
 
-export default function ThemeSwitcher({ color = "primary" }: Props) {
+// ===================== Component ===================== //
+
+/**
+ * ThemeSwitcher component.
+ *
+ * @component
+ * @description
+ * Renders a toggle switch to switch between light and dark themes.
+ * Uses a custom hook to manage the theme mode. Shows a skeleton
+ * placeholder during server-side rendering to avoid hydration issues.
+ *
+ * @param {ThemeSwitcherProps} props - The props object.
+ * @param {ColorType} [props.color="primary"] - MUI color type for the switch.
+ *
+ * @returns {JSX.Element} The rendered theme switcher.
+ */
+export default function ThemeSwitcher({ color = "primary" }: ThemeSwitcherProps) : JSX.Element {
   // get current theme mode and toggle function from custom hook
   const { mode, toggle } = useThemeMode();
 

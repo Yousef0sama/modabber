@@ -1,16 +1,20 @@
-// imports
+// ===================== Imports ===================== //
 
-// interfaces
+// Interfaces
 import { InputField } from "@/interfaces/interfaces";
 
+// ===================== Utilities ===================== //
+
 /**
- * Validates an array of input fields using their assigned validators.
+ * validateFormFields
  *
- * For each field, runs its validators sequentially until one returns an error.
- * Sets `isErr` to true if an error is found, and attaches the error message.
+ * @description
+ * - Validates an array of input fields by running each field's validators.
+ * - Stops at the first validation error per field.
+ * - Updates each field's error state (`isErr`) and error message (`error`).
  *
- * @param fields - One or more InputField objects to validate.
- * @returns A new array of InputField objects with updated error state and message.
+ * @param {...InputField[]} fields - One or more InputField objects to validate.
+ * @returns {InputField[]} - Array of InputField objects with updated error state.
  */
 export default function validateFormFields(
   ...fields: InputField[]
@@ -18,11 +22,13 @@ export default function validateFormFields(
   return fields.map((field) => {
     let error: string | null = null;
 
+    // Run validators sequentially until error found
     for (const validate of field.validators) {
       error = validate(field.value);
-      if (error) break; // Stop at first validation error
+      if (error) break; // Stop on first error
     }
 
+    // Return updated field with error info
     return {
       ...field,
       isErr: !!error,

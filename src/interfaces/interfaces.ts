@@ -21,3 +21,13 @@ export interface Notification {
   read: boolean;
   createdAt: Date;
 }
+
+// interface for Profile Navigation Tabs
+
+export type Tab = "profile" | "goals" | "changeName" | "changePassword" | "changeEmail" | "deleteAccount";
+
+export interface TabItem {
+  label: string;
+  value: Tab;
+  icon?: React.JSX.Element;
+};

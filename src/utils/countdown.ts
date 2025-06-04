@@ -1,27 +1,41 @@
+// ===================== Utilities ===================== //
+
 /**
- * Returns the waiting time in milliseconds based on the number of attempts.
- * - If attempts >= 6, wait time is 8 hours.
- * - Otherwise, returns a predefined wait time from the `seconds` array.
+ * getWaitTime
  *
- * @param attempt - The number of times the user has requested a reset link.
- * @returns Wait time in milliseconds.
+ * @description
+ * Calculates the waiting time based on the number of attempts made by the user.
+ * Returns the waiting time in milliseconds based on the number of attempts.
+ * Rules:
+ * - If attempts ≥ 6 → returns 8 hours.
+ * - Otherwise → uses predefined delays from the array.
+ * * Predefined delays:
+ *   - 1 attempts: 30 seconds
+ *   - 2 attempt: 60 seconds
+ *   - 3 attempts: 90 seconds
+ *   - 4 attempts: 120 seconds
+ *   - 5 attempts: 300 seconds
+ *
+ * @param {number} attempt - The number of times the user has attempted the action.
+ * @returns {number} Wait time in milliseconds.
  */
 export const getWaitTime = (attempt: number): number => {
   if (attempt >= 6) return 8 * 60 * 60 * 1000; // 8 hours in ms
 
-  // Predefined wait durations (in seconds) for each attempt
-  const seconds = [30, 60, 90, 120, 300];
+  const seconds = [30, 60, 90, 120, 300]; // Predefined durations in seconds
 
-  // Return corresponding wait time or default to 480 seconds (8 minutes)
-  return seconds[attempt] * 1000;
+  return seconds[attempt] * 1000; // Convert to milliseconds
 };
 
 /**
- * Converts a countdown duration from seconds to a formatted string.
- * Example: 7388 => "2h 3m 8s"
+ * formatCountdown
  *
- * @param seconds - Total seconds remaining.
- * @returns Formatted countdown string (e.g., "1h 20m 5s").
+ * @description
+ * - Converts a duration (in seconds) into a formatted string.
+ * - Example: 7388 → "2h 3m 8s"
+ *
+ * @param {number} seconds - Total seconds remaining.
+ * @returns {string} Formatted string (e.g., "1h 20m 5s").
  */
 export const formatCountdown = (seconds: number): string => {
   const h = Math.floor(seconds / 3600);

@@ -1,71 +1,102 @@
-// imports
+// ===================== Imports ===================== //
 
-// components
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-
-// icons
-import { Person, EmojiEvents } from "@mui/icons-material";
-
-// custom hook to get current theme mode (light or dark)
+// Hooks
 import { useThemeMode } from "@/hooks/useThemeMode";
 
-// component props type definition
-type Props = {
-  activeTab: "profile" | "goals"; // current active tab
-  setActiveTab: (tab: "profile" | "goals") => void; // function to change the active tab
-};
+// Components
+import { List } from "@mui/material";
+import FetchProfileNavTabs from "../fetch/fetchProfileNavTabs";
+
+// Icons
+import {
+  Person,
+  EmojiEvents,
+  Badge,
+  Email,
+  Key,
+  Delete,
+} from "@mui/icons-material";
+
+// Interfaces
+import { TabItem, Tab } from "@/interfaces/interfaces";
+
+interface ProfileNavProps {
+  activeTab: Tab;
+  setActiveTab: (tab: Tab) => void;
+}
+
+// ===================== Component ===================== //
 
 /**
- * ProfileNav component:
- * Displays a vertical navigation menu inside the profile page.
- * Allows switching between "Profile" and "Goals" tabs.
+ * ProfileNav component.
+ *
+ * @component
+ * @description
+ * Renders a vertical sidebar navigation for the profile page. It allows users to switch between
+ * profile-related tabs such as profile info, goals, and account settings.
+ *
+ * @param {ProfileNavProps} props - Component props.
+ * @param {Tab} props.activeTab - The currently selected tab.
+ * @param {(tab: Tab) => void} props.setActiveTab - Callback to update the active tab.
+ *
+ * @returns {JSX.Element} A sidebar navigation with tabs.
  */
-export default function ProfileNav({ activeTab, setActiveTab }: Props) {
-  // get current theme mode from context (light/dark)
+export default function ProfileNav({
+  activeTab,
+  setActiveTab,
+}: ProfileNavProps) {
+  // Get the current theme mode (light/dark)
   const { mode } = useThemeMode();
 
+  // Define all available profile tabs
+  const tabs: TabItem[] = [
+    {
+      label: "Profile",
+      value: "profile",
+      icon: <Person />, // Profile tab icon
+    },
+    {
+      label: "Goals",
+      value: "goals",
+      icon: <EmojiEvents />, // Goals tab icon
+    },
+    {
+      label: "Change Name",
+      value: "changeName",
+      icon: <Badge />, // Change Name tab icon
+    },
+    {
+      label: "Change Email",
+      value: "changeEmail",
+      icon: <Email />, // Change Email tab icon
+    },
+    {
+      label: "Change Password",
+      value: "changePassword",
+      icon: <Key />, // Change Password tab icon
+    },
+    {
+      label: "Delete Account",
+      value: "deleteAccount",
+      icon: <Delete />, // Delete Account tab icon
+    },
+  ];
+
   return (
-    // main nav container with dynamic right border color based on theme
+    // Main sidebar container with dynamic border color based on theme
     <nav
       className={`flex flex-col w-[20%] min-h-full border-r-4 ${
         mode === "dark" ? "border-r-[#444]" : "border-r-[#d0d0d0]"
       }`}
     >
-      {/* list of navigation items */}
+      {/* Tab list container */}
       <List className="px-2">
-        {/* Profile tab button */}
-        <ListItem disablePadding>
-          <ListItemButton
-            selected={activeTab === "profile"} // highlight if active
-            onClick={() => setActiveTab("profile")} // change tab on click
-          >
-            <ListItemIcon>
-              <Person /> {/* icon for Profile tab */}
-            </ListItemIcon>
-            <ListItemText primary="Profile" className="hidden sm:block" />{" "}
-            {/* text label (hidden on small screens) */}
-          </ListItemButton>
-        </ListItem>
-
-        {/* Goals tab button */}
-        <ListItem disablePadding>
-          <ListItemButton
-            selected={activeTab === "goals"} // highlight if active
-            onClick={() => setActiveTab("goals")} // change tab on click
-          >
-            <ListItemIcon>
-              <EmojiEvents /> {/* icon for Goals tab */}
-            </ListItemIcon>
-            <ListItemText primary="Goals" className="hidden sm:block" />{" "}
-            {/* text label (hidden on small screens) */}
-          </ListItemButton>
-        </ListItem>
+        {/* Render all nav tab buttons */}
+        <FetchProfileNavTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          tabs={tabs}
+        />
       </List>
     </nav>
   );

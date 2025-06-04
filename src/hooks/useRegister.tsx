@@ -1,4 +1,4 @@
-// imports
+// ========== Imports ========== //
 
 // Hooks
 import { useState } from "react";
@@ -18,16 +18,37 @@ import {
 // Interfaces
 import { InputField } from "@/interfaces/interfaces";
 
+interface RegisterHook {
+  fields: InputField[];
+  setFields: React.Dispatch<React.SetStateAction<InputField[]>>;
+  handleChange: (index: number, newValue: string) => void;
+  handleSubmit: (e: React.FormEvent) => Promise<void>;
+}
+
+// ========== Hook ========== //
+
 /**
- * Custom hook to manage registration form logic including:
- * - form state with validation rules
- * - handling input changes
- * - submitting registration and redirecting on success
+ * @hook
+ * useRegisterLogic
+ *
+ * @description
+ * Custom hook to manage registration form logic.
+ * Handles:
+ * - Manages form fields state and validation.
+ * - Handles input changes.
+ * - Submits registration and redirects on success.
+ *
+ * @returns {{
+ *  fields: InputField[],
+ *  setFields: React.Dispatch<React.SetStateAction<InputField[]>>,
+ *  handleChange: (index: number, newValue: string) => void,
+ *  handleSubmit: (e: React.FormEvent) => Promise<void>
+ * }}
  */
-export default function useRegisterLogic() {
+export default function useRegisterLogic() : RegisterHook {
   const router = useRouter();
 
-  // Initial form fields state with validators and error tracking
+  // Initial form fields state with validators and error flags
   const [fields, setFields] = useState<InputField[]>([
     {
       name: "firstName",
@@ -60,9 +81,10 @@ export default function useRegisterLogic() {
   ]);
 
   /**
-   * Updates the value of a specific input field by its index.
+   * Updates the value of a form field by its index.
+   *
    * @param index - index of the field to update
-   * @param newValue - new value to set
+   * @param newValue - new input value
    */
   const handleChange = (index: number, newValue: string) => {
     setFields((prevFields) =>
@@ -73,12 +95,14 @@ export default function useRegisterLogic() {
   };
 
   /**
-   * Handles form submission:
-   * - prevents default form behavior
-   * - validates all form fields
-   * - triggers registration if validation passes
-   * - redirects to login page on successful registration
-   * @param e - form submission event
+   * Handles form submission.
+   *
+   * - Prevents default browser submission.
+   * - Validates all fields.
+   * - If valid, attempts registration.
+   * - Redirects to login on success.
+   *
+   * @param e - form event
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +121,7 @@ export default function useRegisterLogic() {
 
   return {
     fields,
+    setFields,
     handleChange,
     handleSubmit,
   };

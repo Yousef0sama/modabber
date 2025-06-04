@@ -1,4 +1,4 @@
-// imports
+// ========== Imports ========== //
 
 // Hooks
 import { useState } from "react";
@@ -12,17 +12,39 @@ import { isEmpty, isEmail } from "@/utils/validators";
 // Interfaces
 import { InputField } from "@/interfaces/interfaces";
 
+interface LoginHook {
+  fields: InputField[];
+  setFields: React.Dispatch<React.SetStateAction<InputField[]>>;
+  setRemember: React.Dispatch<React.SetStateAction<boolean>>;
+  handleChange: (index: number, newValue: string) => void;
+  handleSubmit: (e: React.FormEvent) => Promise<void>;
+}
+
+// ========== Hook ========== //
+
 /**
- * Custom hook to manage login form logic including:
- * - form state and validation
- * - handling "remember me"
- * - submission and redirection on success
+ * @hook
+ * useLoginLogic
+ *
+ * @description
+ * Custom hook to manage:
+ * - Form field state and validation.
+ * - Manages login form input state and validation.
+ * - Handles "Remember Me" checkbox.
+ * - Submits form and redirects on successful login.
+ *
+ * @returns {{
+ *  - fields: InputField[]
+ *  - setFields: React.Dispatch<React.SetStateAction<InputField[]>>
+ *  - setRemember: React.Dispatch<React.SetStateAction<boolean>>
+ *  - handleChange: (index: number, newValue: string) => void
+ *  - handleSubmit: (e: React.FormEvent) => Promise<void>
+ * }}
  */
-export default function useLoginLogic() {
+export default function useLoginLogic() : LoginHook {
   const router = useRouter();
   const [remember, setRemember] = useState(false);
 
-  // Form fields with initial values, validators, and error states
   const [fields, setFields] = useState<InputField[]>([
     {
       name: "email",
@@ -41,9 +63,10 @@ export default function useLoginLogic() {
   ]);
 
   /**
-   * Update the value of a field based on its index in the fields array
-   * @param index - the index of the field to update
-   * @param newValue - the new value to set for that field
+   * Update the value of a specific input field by its index.
+   *
+   * @param {number} index - Index of the field in the fields array.
+   * @param {string} newValue - New value to assign to the field.
    */
   const handleChange = (index: number, newValue: string) => {
     setFields((prevFields) =>
@@ -54,24 +77,24 @@ export default function useLoginLogic() {
   };
 
   /**
-   * Handle form submission:
-   * - prevents default submit event
-   * - validates all fields
-   * - if no errors, attempts login and redirects on success
-   * @param e - form submission event
+   * Handles form submission:
+   * - Prevents default form behavior.
+   * - Validates form fields.
+   * - Calls login handler and redirects if successful.
+   *
+   * @param {React.FormEvent} e - The form submission event.
+   * @returns {Promise<void>} - No return value but handles login logic.
    */
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
-    // Validate all fields and update state
     const validatedFields = validateFormFields(...fields);
     setFields(validatedFields);
 
-    // If no errors, try to login
     const hasError = validatedFields.some((field) => field.isErr);
     if (!hasError) {
       const success = await handleLogin(fields, setFields, remember);
-      if (success) router.push("/"); // redirect on success
+      if (success) router.push("/");
     }
   };
 

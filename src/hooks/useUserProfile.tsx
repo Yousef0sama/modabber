@@ -1,14 +1,21 @@
-// imports
+// ========== Imports ========== //
 
-// firebase
+// Firebase
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-// utils
+// Utils
 import { useQuery } from "@tanstack/react-query";
 
+// ========== Helper Function ========== //
+
 /**
- * Fetches user data from Firestore using the provided UID.
+ * @helper
+ *
+ * @description
+ * - This function fetches user data from Firestore based on the provided UID.
+ * - It retrieves the user document from the "users" collection and returns the data.
+ * - If the user document does not exist, it throws an error.
  *
  * @param uid - The user ID.
  * @returns The user data from Firestore.
@@ -25,8 +32,18 @@ async function fetchUserData(uid: string) {
   return userSnap.data();
 }
 
+// ========== Hook ========== //
+
 /**
+ *
+ * @hook
+ * useUserProfile
+ *
+ * @description
  * Custom hook to fetch user profile data using React Query.
+ * Handles:
+ * - Fetches user document from Firestore using the UID.
+ * - Uses React Query for caching, loading, and error states.
  *
  * @param uid - The Firebase user ID.
  * @returns Query object containing loading, error, and data states.

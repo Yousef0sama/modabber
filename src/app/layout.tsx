@@ -1,46 +1,49 @@
-// imports
+// ===================== Imports ===================== //
 
-// providers
+// Providers
 import ReduxProvider from "@/providers/reduxProvider";
 import AuthProvider from "@/providers/authProvider";
 import QueryProvider from "@/providers/queryProvider";
 
-// fonts
+// Fonts
 import { Poppins } from "next/font/google";
 
-// styles
+// Styles
 import "@/styles/globals.css";
 
-// componets
+// Components
 import Header from "@/components/header";
-import { Toaster } from "react-hot-toast"
+import { Toaster } from "react-hot-toast";
 
-// interfaces
+// Interfaces
 import type { Metadata } from "next";
 
-type props = Readonly<{
-  children: React.ReactNode;
-}>
-
+// ===================== Font Config ===================== //
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
 });
 
+// ===================== Metadata ===================== //
+
 export const metadata: Metadata = {
-  title: 'مدبر',
-  description: 'مدبر هو تطبيق لإدارة المصاريف يساعدك على تتبع مصاريفك اليومية والشهرية بكل سهولة وشفافية. من خلال واجهة بسيطة وسهلة الاستخدام، يمكنك تسجيل المصاريف، وضع الميزانيات، وتحليل إنفاقك لتحسين إدارة أموالك وتحقيق أهدافك المالية.',
+  title: "مدبر",
+  description:
+    "مدبر هو تطبيق لإدارة المصاريف يساعدك على تتبع مصاريفك اليومية والشهرية بكل سهولة وشفافية. من خلال واجهة بسيطة وسهلة الاستخدام، يمكنك تسجيل المصاريف، وضع الميزانيات، وتحليل إنفاقك لتحسين إدارة أموالك وتحقيق أهدافك المالية.",
 };
 
-export default function RootLayout({children} : props) {
+// ===================== Layout Component ===================== //
 
+type Props = Readonly<{
+  children: React.ReactNode;
+}>;
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body
-        className={`${poppins.className} antialiased`}
-      >
+      <body className={`${poppins.className} antialiased`}>
         <ReduxProvider>
           <QueryProvider>
             <AuthProvider>
